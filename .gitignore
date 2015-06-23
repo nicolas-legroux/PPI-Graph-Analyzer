@@ -1,9 +1,6 @@
 bin/*
-data/*
+*.txt
+*.tsv
 
-
-#Eclipse files
 .classpath
-.settings/*
 .project
-/bin/
