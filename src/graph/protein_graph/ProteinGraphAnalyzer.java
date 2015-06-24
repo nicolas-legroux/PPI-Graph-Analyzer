@@ -47,12 +47,13 @@ public class ProteinGraphAnalyzer extends GraphAnalyzer {
 		int alreadyInSet = 0;
 		for(Node node : graph.getNodes()){
 			Protein p = (Protein)node;
+		
 			for(String entrezID : p.getEntrezIDs()){
 				if(referenceProteins.contains(entrezID)){
 					if(!foundProteins.add(entrezID)){
 						alreadyInSet++;
 					}
-				}
+				}				
 			}
 		}
 		

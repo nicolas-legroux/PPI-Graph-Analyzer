@@ -465,7 +465,58 @@ public void buildFromStringMapper(String filename) {
 		System.out.println("################################################");
 	}
 	
-	public static Map<String, String> buildEntrezHGNCBijection(String tcgaFilename){
+	public static Map<String, String> buildEnsemblToEntrezBijection(String stringMapperFilename){
+		
+		Map<String, String> map = new HashMap<String, String>();
+		BufferedReader br = null;
+
+		try {
+			br = new BufferedReader(new FileReader(stringMapperFilename));
+		} catch (FileNotFoundException e) {
+			System.out.println("File does not exist.");
+			return null;
+		}
+
+		if (br != null) {
+			String line = null;
+			try {
+				// Discard first line
+				line = br.readLine();
+				line = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			while (line != null) {
+
+				String[] lineData = line.split("\t", -1);
+				String entrezID = lineData[0].trim();				
+				String ensemblID = lineData[1].trim();	
+				
+				if (ensemblID.indexOf('.') != -1) {
+					ensemblID = ensemblID.substring(ensemblID.indexOf('.') + 1);
+				}
+				
+				map.put(ensemblID, entrezID);
+
+				try {
+					line = br.readLine();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		try {
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return map;
+	}
+	
+	public static Map<String, String> buildEntrezToHGNCBijection(String tcgaFilename){
 		Map<String, String> map = new HashMap<String, String>();
 
 		BufferedReader br = null;
