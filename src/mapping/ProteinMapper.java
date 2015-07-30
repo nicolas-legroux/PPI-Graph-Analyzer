@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 public class ProteinMapper {
@@ -562,5 +564,51 @@ public void buildFromStringMapper(String filename) {
 		}		
 		
 		return map;
+	}
+	
+	public static Set<String> buildBergonieProteinSet(String filename){
+		Set<String> proteins = new HashSet<String>();
+		BufferedReader br = null;
+
+		try {
+			br = new BufferedReader(new FileReader(filename));
+		} catch (FileNotFoundException e) {
+			System.out.println("File does not exist.");
+		}
+		
+		if (br != null) {
+			String line = null;
+			try {
+				// Discard first line
+				line = br.readLine();
+				line = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			while (line != null) {
+
+				String[] lineData = line.split("\t");	
+				String HGNCSymbol = lineData[0].toUpperCase();
+								
+				if(!HGNCSymbol.equals("?")){
+					proteins.add(HGNCSymbol);
+				}			
+				
+				try {
+					line = br.readLine();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		try {
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+		
+		return proteins;
 	}
 }
